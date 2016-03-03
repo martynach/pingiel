@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -20,6 +21,9 @@ public class Racket {
 	private long lastFrameTime = System.nanoTime();
 	private boolean moveUp = false;
 	private boolean moveDown = false;
+	private boolean moveLeft = false;
+	private boolean moveRight = false;
+	private int angle = 0;
 	
 	public Racket(Board b, double[] pos, char[] keys) {
 		board = b;
@@ -37,10 +41,20 @@ public class Racket {
 		}, e -> {
 			moveDown = false;
 		});
+		keyHooks.addListeners(KeyStroke.getKeyStroke(KeyEvent.getExtendedKeyCodeForChar(keys[2]), 0).getKeyCode(), e -> {
+			moveRight = true;
+		}, e -> {
+			moveRight = false;
+		});
+		keyHooks.addListeners(KeyStroke.getKeyStroke(KeyEvent.getExtendedKeyCodeForChar(keys[3]), 0).getKeyCode(), e -> {
+			moveLeft = true;
+		}, e -> {
+			moveLeft = false;
+		});
 	}
 	
 	
-	public Rectangle2D update() {
+	public Rectangle2D update(Graphics2D g2d) {
 		long currentTime = System.nanoTime();
 		long timeDiff = currentTime - lastFrameTime;
 		long pixels = (long) (timeDiff / 10000000);
@@ -52,8 +66,19 @@ public class Racket {
 		if(moveDown)
 			rectangle.y = (board.getHeight()-rectangle.y-rectangle.height > pixels ? rectangle.y+pixels : board.getHeight()-rectangle.getHeight());
 		
+		if(moveLeft)
+			angle += pixels;
+		
+		if(moveRight)
+			angle -= pixels;
+		
+		angle = (angle > 30 ? 30 : (angle < -30 ? -30 : angle));
+		
 		//rectangle.y++;
 		lastFrameTime = currentTime;
+		g2d.rotate(Math.toRadians(angle), rectangle.x+(rectangle.width/2), rectangle.y+(rectangle.height/2));
+		g2d.fill(rectangle);
+		g2d.rotate(Math.toRadians(-angle), rectangle.x+(rectangle.width/2), rectangle.y+(rectangle.height/2));
 		return rectangle;
 	}
 	

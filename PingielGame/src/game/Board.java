@@ -12,8 +12,8 @@ public class Board extends JPanel{
 	private Racket rightRacket;
 	
 	public Board(){
-		leftRacket = new Racket(this, new double[]{0, 0, 5, 30}, new char[]{'w', 's'});
-		rightRacket = new Racket(this, new double[]{this.getWidth()-5, 0, 5, 30}, new char[]{'o', 'l'});
+		leftRacket = new Racket(this, new double[]{10, 0, 5, 30}, new char[]{'w', 's', 'a', 'd'});
+		rightRacket = new Racket(this, new double[]{this.getWidth()-15, 0, 5, 30}, new char[]{'i', 'k', 'j', 'l'});
 		
 		add(new JButton("START GAME"));
 		
@@ -32,7 +32,7 @@ public class Board extends JPanel{
 		this.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-				rightRacket.rectangle.x = Board.this.getWidth()-5;
+				rightRacket.rectangle.x = Board.this.getWidth()-15;
 			}
 		});
 	}
@@ -48,9 +48,8 @@ public class Board extends JPanel{
     private void drawBoard(Graphics graphics){    
     	Graphics2D g2d = (Graphics2D)graphics;
     
-    	g2d.fill(leftRacket.update());
-    	g2d.fill(rightRacket.update());
-    	
+    	leftRacket.update(g2d);
+    	rightRacket.update(g2d);
     }
 }
 

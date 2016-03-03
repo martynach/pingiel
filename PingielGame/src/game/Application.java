@@ -2,7 +2,10 @@ package game;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import javax.swing.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+
+import javax.swing.JFrame;
 
 public class Application extends JFrame{
 
@@ -14,6 +17,7 @@ public class Application extends JFrame{
 	private boolean isResizable = true;
 	private Dimension windowDimension = new Dimension(300, 200);
 	private Dimension minimumWindowDimension = new Dimension(300, 200);
+	private Board board;
 	
 	private void init(){
 		setSize(windowDimension);
@@ -22,7 +26,17 @@ public class Application extends JFrame{
 		setTitle("PING-PONG");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
-		add(new Board(new Dimension((int)(windowDimension.getWidth() - 15), (int)(windowDimension.getHeight() - 30))));
+		board = new Board(new Dimension((int)(windowDimension.getWidth() - 15), (int)(windowDimension.getHeight() - 30)));
+		add(board);
+		
+		this.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				windowDimension = Application.this.getSize();
+				board.ourResize(new Dimension((int)(windowDimension.getWidth() - 15), (int)(windowDimension.getHeight() - 30)));
+			}
+		});
+		
 	}
 	
 	public static void main(String []args){

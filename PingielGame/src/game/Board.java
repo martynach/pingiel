@@ -31,6 +31,11 @@ public class Board extends JPanel{
 		}).start();
 	}
 	
+	public void ourResize(Dimension d) {
+		boardDimension = d;
+		rightRacket.rectangle.x = boardDimension.getWidth()-5;
+	}
+	
 
     @Override
     public void paintComponent(Graphics graphics) {

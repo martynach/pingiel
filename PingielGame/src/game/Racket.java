@@ -15,7 +15,7 @@ import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
 public class Racket {
-	private Rectangle2D.Double rectangle;
+	Rectangle2D.Double rectangle;
 	private Board board;
 	private long lastFrameTime = System.nanoTime();
 	private boolean moveUp = false;
@@ -44,7 +44,7 @@ public class Racket {
 		long currentTime = System.nanoTime();
 		long timeDiff = currentTime - lastFrameTime;
 		long pixels = (long) (timeDiff / 10000000);
-		System.out.println(pixels);
+		//System.out.println(pixels);
 		
 		if(moveUp)
 			rectangle.y -= (rectangle.y > pixels ? pixels : rectangle.y%pixels);

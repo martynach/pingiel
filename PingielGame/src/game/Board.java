@@ -3,18 +3,17 @@ package game;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 
 public class Board extends JPanel{
-	private Dimension boardDimension;
-	
 	private Racket leftRacket;
 	private Racket rightRacket;
 	
-	public Board(Dimension boardDimension){	
-		this.boardDimension = boardDimension;
+	public Board(){
 		leftRacket = new Racket(this, new double[]{0, 0, 5, 30}, new char[]{'w', 's'});
-		rightRacket = new Racket(this, new double[]{boardDimension.getWidth()-5, 0, 5, 30}, new char[]{'o', 'l'});
+		rightRacket = new Racket(this, new double[]{this.getWidth()-5, 0, 5, 30}, new char[]{'o', 'l'});
 		
 		add(new JButton("START GAME"));
 		
@@ -29,11 +28,13 @@ public class Board extends JPanel{
 				}
 			}
 		}).start();
-	}
-	
-	public void ourResize(Dimension d) {
-		boardDimension = d;
-		rightRacket.rectangle.x = boardDimension.getWidth()-5;
+		
+		this.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				rightRacket.rectangle.x = Board.this.getWidth()-5;
+			}
+		});
 	}
 	
 

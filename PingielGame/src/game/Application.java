@@ -26,17 +26,8 @@ public class Application extends JFrame{
 		setTitle("PING-PONG");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
-		board = new Board(new Dimension((int)(windowDimension.getWidth() - 15), (int)(windowDimension.getHeight() - 30)));
+		board = new Board();
 		add(board);
-		
-		this.addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentResized(ComponentEvent e) {
-				windowDimension = Application.this.getSize();
-				board.ourResize(new Dimension((int)(windowDimension.getWidth() - 15), (int)(windowDimension.getHeight() - 30)));
-			}
-		});
-		
 	}
 	
 	public static void main(String []args){

@@ -8,9 +8,27 @@ import java.awt.*;
 public class Board extends JPanel{
 	private Dimension boardDimension;
 	
+	private Racket leftRacket;
+	private Racket rightRacket;
+	
 	public Board(Dimension boardDimension){	
 		this.boardDimension = boardDimension;
+		leftRacket = new Racket(this, new double[]{0, 0, 5, 30}, new char[]{'w', 's'});
+		rightRacket = new Racket(this, new double[]{boardDimension.getWidth()-5, 0, 5, 30}, new char[]{'o', 'l'});
+		
 		add(new JButton("START GAME"));
+		
+		new Thread(() -> {
+			while(true) {
+				this.repaint();
+				try {
+					Thread.sleep(20);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}).start();
 	}
 	
 
@@ -21,11 +39,12 @@ public class Board extends JPanel{
         drawBoard(graphics);
     }
     
-    private void drawBoard(Graphics graphics){
-    	
+    private void drawBoard(Graphics graphics){    
     	Graphics2D g2d = (Graphics2D)graphics;
-    	g2d.draw(new Rectangle.Double(10, 9 * boardDimension.getHeight() / 20, 5, boardDimension.getHeight() / 10));
-    	g2d.draw(new Rectangle.Double(boardDimension.getWidth() - 15, 9 * boardDimension.getHeight() / 20, 5, boardDimension.getHeight() / 10));
+    
+    	g2d.fill(leftRacket.update());
+    	g2d.fill(rightRacket.update());
+    	
     }
 }
 

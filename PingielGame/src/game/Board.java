@@ -11,15 +11,26 @@ public class Board extends JPanel{
 	Racket leftRacket;
 	Racket rightRacket;
 	private Ball ball;
+	private boolean gameStarted = false;
+	JButton startButton = new JButton("START GAME");
 	
 	
 	
 	public Board(){
-		leftRacket = new Racket(this, new double[]{10, 0, 5, 30}, new char[]{'w', 's', 'a', 'd'});
-		rightRacket = new Racket(this, new double[]{this.getWidth()-15, 0, 5, 30}, new char[]{'i', 'k', 'j', 'l'});
-
+		add(startButton);
 		
-		add(new JButton("START GAME"));
+		startButton.addActionListener((event) ->
+		{
+			startButton.setVisible(false);
+			gameStarted = true;
+			startGame();
+		} );
+	}
+	
+	private void startGame(){
+		leftRacket = new Racket(this, new double[]{10, 0, 5, 30}, new char[]{'w', 's', 'a', 'd'});
+		rightRacket = new Racket(this, new double[]{this.getWidth()-15, 0, 5, 30}, new char[]{'i', 'k', 'j', 'l'});	
+		ball = new Ball(Board.this);
 		
 		new Thread(() -> {
 			while(true) {
@@ -37,9 +48,6 @@ public class Board extends JPanel{
 			@Override
 			public void componentResized(ComponentEvent e) {
 				rightRacket.rectangle.x = Board.this.getWidth()-15;
-				if(ball == null){
-					ball = new Ball(Board.this);
-				}	
 			}
 		});
 	}
@@ -49,7 +57,10 @@ public class Board extends JPanel{
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
 
-        drawBoard(graphics);
+        if(gameStarted){
+        	drawBoard(graphics);
+        }
+        
     }
     
     private void drawBoard(Graphics graphics){    
@@ -57,10 +68,7 @@ public class Board extends JPanel{
     
     	leftRacket.update(g2d);
     	rightRacket.update(g2d);
-    	if(ball != null){
-    		ball.update(g2d);
-    	}
-    	
+    	ball.update(g2d); 	
     }
 }
 

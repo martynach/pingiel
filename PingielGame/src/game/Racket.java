@@ -23,7 +23,7 @@ public class Racket {
 	private boolean moveDown = false;
 	private boolean moveLeft = false;
 	private boolean moveRight = false;
-	private int angle = 0;
+	int angle = 0;
 	
 	public Racket(Board b, double[] pos, char[] keys) {
 		board = b;

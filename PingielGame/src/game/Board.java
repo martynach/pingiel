@@ -8,12 +8,16 @@ import java.awt.event.ComponentEvent;
 
 
 public class Board extends JPanel{
-	private Racket leftRacket;
-	private Racket rightRacket;
+	Racket leftRacket;
+	Racket rightRacket;
+	private Ball ball;
+	
+	
 	
 	public Board(){
 		leftRacket = new Racket(this, new double[]{10, 0, 5, 30}, new char[]{'w', 's', 'a', 'd'});
 		rightRacket = new Racket(this, new double[]{this.getWidth()-15, 0, 5, 30}, new char[]{'i', 'k', 'j', 'l'});
+
 		
 		add(new JButton("START GAME"));
 		
@@ -33,6 +37,9 @@ public class Board extends JPanel{
 			@Override
 			public void componentResized(ComponentEvent e) {
 				rightRacket.rectangle.x = Board.this.getWidth()-15;
+				if(ball == null){
+					ball = new Ball(Board.this);
+				}	
 			}
 		});
 	}
@@ -50,6 +57,10 @@ public class Board extends JPanel{
     
     	leftRacket.update(g2d);
     	rightRacket.update(g2d);
+    	if(ball != null){
+    		ball.update(g2d);
+    	}
+    	
     }
 }
 

@@ -50,21 +50,9 @@ public class Ball {
 	}
 
 	private class Direction {
-		private double horizontalAngle;
-		private double x;
-		private double y;
-
-		private Direction() {
-			Random random = new Random();
-			boolean left = random.nextBoolean();
-			horizontalAngle = -80 + random.nextInt(160);
-			if (left) {
-				horizontalAngle *= (-1);
-			}
-			x = cos(toRadians(horizontalAngle));
-			y = sin(toRadians(horizontalAngle));
-		}
-
+		private double horizontalAngle = (new Random().nextBoolean() ? (-60+new Random().nextInt(120)) : (120+new Random().nextInt(120)));
+		private double x = cos(toRadians(horizontalAngle));
+		private double y = sin(toRadians(horizontalAngle));
 	}
 
 	Direction direction = new Direction();

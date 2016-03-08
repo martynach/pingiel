@@ -7,12 +7,9 @@ import static java.lang.Math.toRadians;
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Line2D;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 public class Racket {
@@ -94,26 +91,4 @@ public class Racket {
 		g2d.draw(line);
 		lastFrameTime = currentTime;
 	}
-	
-	private interface RacketActionCallback {
-		void cb(ActionEvent e);
-	}
-	
-	private class RacketAction extends AbstractAction implements Action {
-		
-		private RacketActionCallback callback;
-		
-		public RacketAction(RacketActionCallback cb) {
-			callback = cb;
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			callback.cb(e);
-			//System.out.println(e);
-		}
-		
-	}
-	
 }

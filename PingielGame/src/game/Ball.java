@@ -13,6 +13,7 @@ public class Ball {
 	Ellipse2D.Double ellipse;
 	Board board;
 	long lastFrameTime = System.nanoTime();
+	int latestCollision = 0;
 	double diameter = 10;
 	
 	public Ball(Board board){
@@ -27,20 +28,21 @@ public class Ball {
 		long timeDiff = currentTime - lastFrameTime;
 		double pixels = timeDiff / 10000000;
 		
-		if(direction.justChanged){
-			direction.justChanged = false;
-		}else{
-			if(ellipse.intersects(board.rightRacket.rectangle)){
-				changeDirection(board.rightRacket.angle + 90);
-			}else if(ellipse.intersects(board.leftRacket.rectangle)){
-				changeDirection(board.leftRacket.angle + 90);
-			}
-			else if(ellipse.y < 0 || ellipse.y + diameter > board.getHeight()){
-				changeDirection(0);
-			}
+		if(board.rightRacket.line.intersects(ellipse.getBounds2D()) && latestCollision != 1) {
+			latestCollision = 1;
+			changeDirection(board.rightRacket.angle + 90);
+		}else if(board.leftRacket.line.intersects(ellipse.getBounds2D()) && latestCollision != 2) {
+			latestCollision = 2;
+			changeDirection(board.leftRacket.angle + 90);
+		} else if(ellipse.y < 0 && latestCollision != 3) {
+			latestCollision = 3;
+			changeDirection(0);
+		} else if(ellipse.y + diameter > board.getHeight() && latestCollision != 4) {
+			latestCollision = 4;
+			changeDirection(0);
+		}
 //			else if()//todo granica z board
 //			else if() //przegrana koniec gry??
-		}
 				
 		ellipse.x += direction.x * pixels;
 		ellipse.y += direction.y * pixels;
@@ -54,7 +56,6 @@ public class Ball {
 		private double horizontalAngle;
 		private double x;
 		private double y;
-		private boolean justChanged = false;
 		
 		private Direction(){			
 			Random random = new Random();
@@ -75,6 +76,5 @@ public class Ball {
 		direction.horizontalAngle = (2 * angle - direction.horizontalAngle) % 360;
 		direction.x = cos(toRadians(direction.horizontalAngle));
 		direction.y = sin(toRadians(direction.horizontalAngle));
-		direction.justChanged = true;
 	}
 }

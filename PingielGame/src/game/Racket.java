@@ -1,22 +1,22 @@
 package game;
 
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static java.lang.Math.toRadians;
+
+import java.awt.BasicStroke;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.geom.Rectangle2D;
-import java.beans.PropertyChangeListener;
-import java.util.Timer;
+import java.awt.geom.Line2D;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
 public class Racket {
-	Rectangle2D.Double rectangle;
+	Line2D.Double line = new Line2D.Double();
 	private Board board;
 	private long lastFrameTime = System.nanoTime();
 	private boolean moveUp = false;
@@ -24,11 +24,19 @@ public class Racket {
 	private boolean moveLeft = false;
 	private boolean moveRight = false;
 	int angle = 0;
+	private Stroke stroke;
+	
+	double x;
+	double y;
+	double width;
+	double height;
 	
 	public Racket(Board b, double[] pos, char[] keys) {
 		board = b;
-		rectangle = new Rectangle2D.Double(pos[0], pos[1], pos[2], pos[3]);
+		this.x = pos[0]; this.y = pos[1]; this.width = pos[2]; this.height = pos[3];
 		
+		stroke = new BasicStroke((float) width);
+
 		RacketKeyHelper keyHooks = new RacketKeyHelper(b);
 		
 		keyHooks.addListeners(KeyStroke.getKeyStroke(KeyEvent.getExtendedKeyCodeForChar(keys[0]), 0).getKeyCode(), e -> {
@@ -54,17 +62,17 @@ public class Racket {
 	}
 	
 	
-	public Rectangle2D update(Graphics2D g2d) {
+	public void update(Graphics2D g2d) {
 		long currentTime = System.nanoTime();
 		long timeDiff = currentTime - lastFrameTime;
 		long pixels = (long) (timeDiff / 10000000);
 		//System.out.println(pixels);
 		
 		if(moveUp)
-			rectangle.y -= (rectangle.y > pixels ? pixels : rectangle.y%pixels);
+			y -= (y > pixels ? pixels : y%pixels);
 		
 		if(moveDown)
-			rectangle.y = (board.getHeight()-rectangle.y-rectangle.height > pixels ? rectangle.y+pixels : board.getHeight()-rectangle.getHeight());
+			y = (board.getHeight()-y-height > pixels ? y+pixels : board.getHeight()-height);
 		
 		if(moveLeft)
 			angle += pixels;
@@ -74,12 +82,17 @@ public class Racket {
 		
 		angle = (angle > 30 ? 30 : (angle < -30 ? -30 : angle));
 		
-		//rectangle.y++;
+		double xdiff = cos(toRadians(90+angle))*(height/2);
+		double ydiff = sin(toRadians(90+angle))*height;
+		
+		line.x1 = x+(width/2)-xdiff;
+		line.y1 = y;
+		line.x2 = x+(width/2)+xdiff;
+		line.y2 = y + ydiff;
+		
+		g2d.setStroke(stroke);
+		g2d.draw(line);
 		lastFrameTime = currentTime;
-		g2d.rotate(Math.toRadians(angle), rectangle.x+(rectangle.width/2), rectangle.y+(rectangle.height/2));
-		g2d.fill(rectangle);
-		g2d.rotate(Math.toRadians(-angle), rectangle.x+(rectangle.width/2), rectangle.y+(rectangle.height/2));
-		return rectangle;
 	}
 	
 	private interface RacketActionCallback {

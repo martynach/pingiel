@@ -47,7 +47,7 @@ public class Board extends JPanel{
 		this.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-				rightRacket.rectangle.x = Board.this.getWidth()-15;
+				rightRacket.x = Board.this.getWidth()-15;
 			}
 		});
 	}

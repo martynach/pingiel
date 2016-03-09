@@ -1,0 +1,23 @@
+option java_package = "game";
+option java_outer_classname = "PingielProto";
+
+
+message Ball {
+	required double x = 1;
+	required double y = 2;
+	required double horizontal_angle = 3;
+}
+
+message Racket {
+	required double y = 1;
+	required double angle = 2;
+	optional bool up = 3;
+	optional bool down = 4;
+	optional bool right = 5;
+	optional bool left = 6;
+}
+
+message Game {
+  optional Ball ball = 1;
+  required Racket racket = 2;
+}
